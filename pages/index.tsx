@@ -132,7 +132,7 @@ const Home: NextPage = () => {
         <br/>
         {
           Array.from(Array(numEntries).keys()).map((index) => (
-            <Entry key={index} index={index} keyPlaceholder='org/repo'  valuePlaceholder='branch' onChange={handleEntryChange} />
+            <Entry key={index} index={index} keyPlaceholder='org/repo'  valuePlaceholder='org:branch or branch' onChange={handleEntryChange} />
           ))
         }
         <br/>
