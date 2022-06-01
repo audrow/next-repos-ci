@@ -31,11 +31,23 @@ export default async function handler(
 
   const reposNotFound: string[] = []
   for(const repoVersion of Object.entries(packages as RepoVersions)) {
-    const [repoName, version] = repoVersion
-    if (fileYaml.repositories[repoName]) {
-      fileYaml.repositories[repoName].version = version
+    const [repoOrgAndName, version] = repoVersion
+
+    let url: string, branch: string
+    if (version.match(/:/)) {
+      const [org, branchName] = version.split(':')
+      const repo = repoOrgAndName.split('/')[1]
+      url = `https://github.com/${org}/${repo}.git`
+      branch = branchName
     } else {
-      reposNotFound.push(repoName)
+      url = fileYaml.repositories[repoOrgAndName].url
+      branch = version
+    }
+    if (fileYaml.repositories[repoOrgAndName]) {
+      fileYaml.repositories[repoOrgAndName].url = url
+      fileYaml.repositories[repoOrgAndName].version = branch
+    } else {
+      reposNotFound.push(repoOrgAndName)
     }
   }
 
